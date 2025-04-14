@@ -2,9 +2,7 @@ import React from "react";
 import styles from "./Header.module.scss";
 import { FiSearch, FiShoppingBag } from "react-icons/fi";
 import { FaApple } from "react-icons/fa";
-import { useNavigate } from "react-router";
 export const Header: React.FC = () => {
-  const navigate = useNavigate();
   return (
     <header className={styles.header}>
       <div className="container">
@@ -13,9 +11,7 @@ export const Header: React.FC = () => {
             <FaApple className={styles.icon} />
           </div>
           <ul className={styles.navList}>
-            <p onClick={() => navigate("/admin")}>
-              <li className={styles.navItem}>Store</li>
-            </p>
+            <li className={styles.navItem}>Store</li>
             <li className={styles.navItem}>Mac</li>
             <li className={styles.navItem}>iPad</li>
             <li className={styles.navItem}>iPhone</li>
