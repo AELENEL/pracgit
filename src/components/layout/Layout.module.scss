@@ -1,0 +1,12 @@
+.Layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  main{
+    flex: 1;
+  }
+  footer {
+    margin-top: auto;
+  }
+}
