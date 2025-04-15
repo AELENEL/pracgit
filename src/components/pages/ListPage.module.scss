@@ -1,0 +1,251 @@
+// ListPages.scss
+
+// Variables
+$primary-color: #0071e3;
+$secondary-color: #1d1d1f;
+$background-color: #f5f5f7;
+$card-color: #ffffff;
+$text-primary: #1d1d1f;
+$text-secondary: #86868b;
+$border-radius: 12px;
+$box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+$transition-time: 0.3s;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin button-reset {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  outline: none;
+}
+
+.product-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: $background-color;
+  min-height: 100vh;
+
+  .product-header {
+    @include flex-between;
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: $text-primary;
+    }
+
+    .add-button {
+      background-color: $primary-color;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background-color $transition-time;
+      @include flex-center;
+
+      span {
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+      }
+
+      &:hover {
+        background-color: darken($primary-color, 5%);
+      }
+    }
+  }
+
+  .empty-state {
+    @include flex-center;
+    flex-direction: column;
+    text-align: center;
+    padding: 5rem 0;
+
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    p {
+      color: $text-secondary;
+      margin-bottom: 2rem;
+    }
+
+    .primary-button {
+      background-color: $primary-color;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all $transition-time;
+
+      &:hover {
+        background-color: darken($primary-color, 5%);
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .product-card {
+    background-color: $card-color;
+    border-radius: $border-radius;
+    overflow: hidden;
+    box-shadow: $box-shadow;
+    transition: transform $transition-time, box-shadow $transition-time;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-content {
+      padding: 1.5rem;
+    }
+
+    .product-image {
+      height: 200px;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform $transition-time;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
+
+    .product-info {
+      .product-name {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        color: $text-primary;
+      }
+
+      .product-category {
+        color: $text-secondary;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .product-price {
+        font-size: 1.3rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+
+      .product-stock {
+        font-size: 0.9rem;
+
+        .in-stock {
+          color: #29cc7a;
+          font-weight: 500;
+        }
+
+        .out-of-stock {
+          color: #ff3b30;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .product-description {
+      padding: 0 1.5rem 1rem;
+      color: $text-secondary;
+      font-size: 0.95rem;
+      line-height: 1.5;
+
+      p {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .card-actions {
+      padding: 1rem 1.5rem;
+      @include flex-between;
+      border-top: 1px solid #eaeaea;
+
+      .edit-button,
+      .delete-button {
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all $transition-time;
+      }
+
+      .edit-button {
+        background-color: #f5f5f7;
+        color: $text-primary;
+        text-decoration: none;
+
+        &:hover {
+          background-color: darken(#f5f5f7, 5%);
+        }
+      }
+
+      .delete-button {
+        @include button-reset;
+        background-color: #fff2f1;
+        color: #ff3b30;
+
+        &:hover {
+          background-color: #ffebe9;
+        }
+      }
+    }
+  }
+
+  .loading,
+  .error-message {
+    @include flex-center;
+    padding: 3rem;
+    font-size: 1.2rem;
+    color: $text-secondary;
+  }
+
+  .error-message {
+    color: #ff3b30;
+  }
+}
