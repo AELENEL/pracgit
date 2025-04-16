@@ -1,5 +1,5 @@
 import AdminPages from "../components/pages/AdminPages";
-import ListPages from "../components/pages/ListPages";
+import HomePage from "../components/pages/HomePage";
 export const links = [
   {
     link: "/admin",
@@ -7,8 +7,8 @@ export const links = [
     el: <AdminPages />,
   },
   {
-    link: "/list",
-    title: "list",
-    el: <ListPages />,
+    link: "/home",
+    title: "home",
+    el: <HomePage />,
   },
 ];

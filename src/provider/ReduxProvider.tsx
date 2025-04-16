@@ -1,11 +1,13 @@
-import React, { FC } from "react";
+import { FC, ReactNode } from "react";
 import { Provider } from "react-redux";
 import { store } from "../store/Store";
-interface IREDUX {
-  children: React.ReactNode;
+
+interface IRedaxProvider {
+  children: ReactNode;
 }
-const ReduxProvider: FC<IREDUX> = ({ children }) => {
+
+const RedaxProvider: FC<IRedaxProvider> = ({ children }) => {
   return <Provider store={store}>{children}</Provider>;
 };
 
-export default ReduxProvider;
+export default RedaxProvider;

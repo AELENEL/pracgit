@@ -13,7 +13,7 @@ export const Header: React.FC = () => {
             <FaApple className={styles.icon} />
           </div>
           <ul className={styles.navList}>
-            <p onClick={() => navigate("/list")}>
+            <p onClick={() => navigate("/home")}>
               <li className={styles.navItem}>Store</li>
             </p>
             <li className={styles.navItem}>Mac</li>
