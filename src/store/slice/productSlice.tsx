@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// Типизация для элемента данных (можешь подставить свой тип)
 interface IItem {
   _id: number;
   name: string;
@@ -8,13 +7,8 @@ interface IItem {
   category: string;
   distraction: string;
   image: string;
-  rate: {
-    rate: number;
-    count: number;
-  };
 }
 
-// Типизация состояния
 interface IData {
   data: IItem[];
 }

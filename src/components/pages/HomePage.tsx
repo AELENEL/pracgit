@@ -1,64 +1,11 @@
-// import { FC, useEffect } from "react";
-// import { useAppDispatch, useAppSelector } from "../../store/Store";
-// import axios from "axios";
-// import { setData } from "../../store/slice/productSlice";
-// import scss from "./HomePage.module.scss";
-// const API = import.meta.env.VITE_API;
-
-// const HomePage: FC = () => {
-//   const { data } = useAppSelector((state) => state.data);
-
-//   const dispatch = useAppDispatch();
-
-//   //!
-//   const fetchData = async () => {
-//     const { data } = await axios.get(API);
-//     dispatch(setData(data.data));
-//   };
-//   //!
-//   const handleDelete = async (id: number) => {
-//     await axios.delete(`${API}/${id}`);
-//     fetchData();
-//   };
-//   //!
-//   useEffect(() => {
-//     fetchData();
-//   }, []);
-//   return (
-//     <section className={scss.HomePage}>
-//       <div className="container">
-//         <div className={scss.content}>
-//           {data.length === 0 ? (
-//             <p>No products available.</p>
-//           ) : (
-//             data.map((product, index) => (
-//               <div className={scss.cart} key={index}>
-//                 <image src={product.image} alt={product.name} />
-//                 <h3>{product.name}</h3>
-//                 <p>{product.price}</p>
-//                 <button onClick={() => handleDelete(product._id)}>
-//                   delete
-//                 </button>
-//               </div>
-//             ))
-//           )}
-//         </div>
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default HomePage;
 import { FC, useEffect, useState } from "react";
+import scss from "./HomePage.module.scss";
 import { useAppDispatch, useAppSelector } from "../../store/Store";
 import axios from "axios";
 import { setData } from "../../store/slice/productSlice";
-import scss from "./HomePage.module.scss";
 import { useForm } from "react-hook-form";
 
 const API = import.meta.env.VITE_API;
-console.log(API);
-
 interface IProduct {
   _id: number;
   name: string;
@@ -67,7 +14,6 @@ interface IProduct {
   distraction: string;
   image: string;
 }
-
 interface IForm {
   name: string;
   price: number;
@@ -82,19 +28,19 @@ const HomePage: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const { register, handleSubmit, reset, setValue } = useForm<IForm>();
+  const [isLoading, setIsLoading] = useState(false); // добавляем
+  const [selectedDetailProduct, setSelectedDetailProduct] =
+    useState<IProduct | null>(null);
 
-  //!
   const fetchData = async () => {
     const { data } = await axios.get(API);
-    dispatch(setData(data));
+    dispatch(setData(data.data));
   };
 
-  //!
   const handleDelete = async (id: number) => {
     await axios.delete(`${API}/${id}`);
     fetchData();
   };
-
   //!
   const handleEdit = (product: IProduct) => {
     setSelectedProduct(product);
@@ -105,8 +51,8 @@ const HomePage: FC = () => {
     setValue("image", product.image);
     setIsModalOpen(true);
   };
-  console.log(data);
 
+  console.log(data);
   //!
   const handleUpdate = async (data: IForm) => {
     if (!selectedProduct) return;
@@ -120,15 +66,17 @@ const HomePage: FC = () => {
     };
 
     try {
+      setIsLoading(true); 
       await axios.patch(`${API}/${selectedProduct._id}`, updatedProduct);
       setIsModalOpen(false);
       fetchData();
       reset();
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false); 
     }
   };
-
   //!
   const closeModal = () => {
     setIsModalOpen(false);
@@ -137,12 +85,21 @@ const HomePage: FC = () => {
   };
 
   //!
+  const openDetailModal = (product: IProduct) => {
+    setSelectedDetailProduct(product);
+  };
+  const closeDetailModal = () => {
+    setSelectedDetailProduct(null);
+  };
+
+  //!
+
   useEffect(() => {
     fetchData();
   }, []);
 
   return (
-    <section className={scss.HomePage}>
+    <section className={scss.homePage}>
       <div className="container">
         <div className={scss.content}>
           {data.length === 0 ? (
@@ -150,29 +107,24 @@ const HomePage: FC = () => {
           ) : (
             data.map((product, index) => (
               <div className={scss.cart} key={index}>
-                <img src={product.image} alt={product.name} />
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  onClick={() => openDetailModal(product)}
+                  className={scss.productImage}
+                />
+
                 <h3>{product.name}</h3>
                 <p>{product.price}</p>
-                <div className={scss.buttons}>
-                  <button
-                    className={scss.editBtn}
-                    onClick={() => handleEdit(product)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className={scss.deleteBtn}
-                    onClick={() => handleDelete(product._id)}
-                  >
-                    Delete
-                  </button>
-                </div>
+                <button onClick={() => handleDelete(product._id)}>
+                  delete
+                </button>
+                <button onClick={() => handleEdit(product)}>edit</button>
               </div>
             ))
           )}
         </div>
       </div>
-
       {isModalOpen && (
         <div className={scss.modalOverlay}>
           <div className={scss.modal}>
@@ -208,8 +160,45 @@ const HomePage: FC = () => {
                 type="text"
                 placeholder="Image URL"
               />
-              <button type="submit">Update</button>
+              <button type="submit" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    Updating
+                    <span className={scss.spinner}></span>
+                  </>
+                ) : (
+                  "Update"
+                )}
+              </button>
             </form>
+          </div>
+        </div>
+      )}
+      {selectedDetailProduct && (
+        <div className={scss.modalOverlay}>
+          <div className={scss.modal}>
+            <div className={scss.modalHeader}>
+              <h2>{selectedDetailProduct.name}</h2>
+              <button className={scss.closeBtn} onClick={closeDetailModal}>
+                ×
+              </button>
+            </div>
+            <div className={scss.detailContent}>
+              <img
+                src={selectedDetailProduct.image}
+                alt={selectedDetailProduct.name}
+              />
+              <p>
+                <strong>Price:</strong> ${selectedDetailProduct.price}
+              </p>
+              <p>
+                <strong>Category:</strong> {selectedDetailProduct.category}
+              </p>
+              <p>
+                <strong>Description:</strong>{" "}
+                {selectedDetailProduct.distraction}
+              </p>
+            </div>
           </div>
         </div>
       )}

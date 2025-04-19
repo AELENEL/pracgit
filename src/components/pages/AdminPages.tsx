@@ -9,7 +9,7 @@ interface IForm {
   price: number;
   category: string;
   distraction: string;
-  img: string;
+  image: string;
 }
 
 const API = import.meta.env.VITE_API;
@@ -23,7 +23,7 @@ const AdminPage: FC = () => {
       price: data.price,
       category: data.category,
       distraction: data.distraction,
-      img: data.img,
+      image: data.image,
     };
     try {
       await axios.post(API, newObj);
